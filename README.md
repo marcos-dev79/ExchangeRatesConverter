@@ -76,7 +76,7 @@ transaction, it shall return an error message.
 ## Tests
 
 The application will run a couple of unit testing for the service layer.
-I admit the tests are simple - I was out of time this week. I would do more
+I admit the tests are simple... I would do more
 complex integration tests using embedded databases, but the time run out for me.
 
 * Made with love by Marcos Marras for WEX.
