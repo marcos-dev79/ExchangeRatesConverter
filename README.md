@@ -1,6 +1,6 @@
 # Exchange Rates Converter APP
 
-Greetings! This is my test application for the WEX company. 
+Greetings! This is a test application for studies purposes. 
 Here is some information about the application.
 
 ## Installation
