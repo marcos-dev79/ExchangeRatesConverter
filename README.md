@@ -9,9 +9,10 @@ In this project I used Java 17 and Spring Boot. Also, I used MongoDB as the data
 very likely to be used in production environment for such application.
 
 1. Clone the repository
-2. Run docker-compose up --build
+2. Run `docker-compose up --build`
 
-I assume you have docker and docker compose in your machine.
+I assume you have docker and docker compose in your machine. Otherwise, [follow
+the official documentation](https://docs.docker.com/compose/install/).
 
 ### Why Docker Compose ?
 
