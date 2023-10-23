@@ -24,11 +24,11 @@ public class PurchaseController {
     @GetMapping(path = "/all")
     @Tag(
         name = "Purchase Transaction",
-        description = "Operations on purchase transactions"
+        description = "Operations on purchase transactions."
     )
     @Operation(
         summary = "Get all operations",
-        description = "Retrieve all operation in the system without any filter or sorting"
+        description = "Retrieve all operation in the system without any filter or sorting."
     )
     public List<PurchaseTransaction> getAll() {
         return purchaseService.findAll();
@@ -40,7 +40,7 @@ public class PurchaseController {
     )
     @Operation(
         summary = "Save a transaction",
-        description = "Receives a transaction, saves it in the database and return the given object"
+        description = "Receives a transaction, saves it in the database and return the given object."
     )
     public PurchaseTransaction save(@RequestBody PurchaseTransaction purchaseTransaction) {
         return purchaseService.save(purchaseTransaction);
@@ -52,10 +52,9 @@ public class PurchaseController {
     )
     @Operation(
         summary = "Convert transaction",
-        description = "Perform the convertion of a given transaction"
+        description = "Perform the convertion of a given transaction. In case you send the wrong or nonexistent uuid, it shall return an error message. Also, if the found exchange rate is older than 6 months than the purchase transaction, it shall return an error message."
     )
     public RequestResponse convert(@RequestBody SearchRequest searchRequest) throws JsonProcessingException {
-        RequestResponse requestResponse = purchaseService.getConvertedData(searchRequest);
-        return requestResponse;
+        return purchaseService.getConvertedData(searchRequest);
     }
 }

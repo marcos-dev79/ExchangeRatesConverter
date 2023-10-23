@@ -1,53 +1,23 @@
 package com.wex.test.domainObj;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class ConvertedPurchase {
+import io.swagger.v3.oas.annotations.media.Schema;
 
-    private String id;
-    private String description;
-    private LocalDateTime transactionDate;
-    private Double original_amount;
-    private Double converted_amount;
-    private Double exchange_rate;
-    private String country_currency_desc;
-
-    public ConvertedPurchase(String id, String description, LocalDateTime transactionDate, Double exchange_rate, Double original_amount, Double converted_amount, String country_currency_desc) {
-        this.id = id;
-        this.description = description;
-        this.transactionDate = transactionDate;
-        this.original_amount = original_amount;
-        this.converted_amount = converted_amount;
-        this.exchange_rate = exchange_rate;
-        this.country_currency_desc = country_currency_desc;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDateTime getTransactionDate() {
-        return transactionDate;
-    }
-
-    public Double getOriginal_amount() {
-        return original_amount;
-    }
-
-    public Double getConverted_amount() {
-        return converted_amount;
-    }
-
-    public Double getExchange_rate() {
-        return exchange_rate;
-    }
-
-    public String getCountry_currency_desc() {
-        return country_currency_desc;
-    }
-
-}
+public record ConvertedPurchase (
+    @Schema(description = "Purchase transaction ID", example = "a42dbe56-2660-4ee4-b439-4b976a2e06d9")
+    UUID id,
+    @Schema(description = "Purchase description", example = "Purchase transaction Test")
+    String description,
+    @Schema(description = "Date of transaction", example = "2018-12-31T17:18")
+    LocalDateTime transactionDate,
+    @Schema(description = "Original amount of purchase", example = "15.3")
+    Double originalAmount,
+    @Schema(description = "Converted amount of purchase", example = "13.35")
+    Double convertedAmount,
+    @Schema(description = "Rate used to convert", example = "0.872")
+    Double exchangeRate,
+    @Schema(description = "Description of currency", example = "GERMANY-EURO")
+    String countryCurrencyDesc
+){}

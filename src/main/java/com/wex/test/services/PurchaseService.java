@@ -33,7 +33,7 @@ public class PurchaseService {
 
         RequestResponse requestResponse = new RequestResponse();
 
-        Optional<PurchaseTransaction> opt = purchaseTransactionRepository.findByUuid(searchRequest.getUuid());
+        Optional<PurchaseTransaction> opt = purchaseTransactionRepository.findByUuid(searchRequest.uuid());
         if(opt.isEmpty()){
             requestResponse.setMessage("The purchase cannot be found.");
             requestResponse.setConvertedPurchase(null);
@@ -41,10 +41,9 @@ public class PurchaseService {
         }
         PurchaseTransaction purchaseTransaction = opt.get();
 
-        String url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,exchange_rate,record_date&filter=country_currency_desc:IN:("+ searchRequest.getCountry_currency_desc() +"),record_date:lte:"+searchRequest.getRecord_date()+"&sort=-record_date&format=json";
+        String url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,exchange_rate,record_date&filter=country_currency_desc:IN:("+ searchRequest.countryCurrencyDesc() +"),record_date:lte:"+searchRequest.recordDate()+"&sort=-record_date&format=json";
 
-        LocalDate requestDate = LocalDate.parse(searchRequest.getRecord_date());
-        LocalDate sixMonthsAgo = requestDate.minusMonths(6);
+        LocalDate sixMonthsAgo = searchRequest.recordDate().minusMonths(6);
 
         RestTemplate restTemplate = new RestTemplate();
         String json = restTemplate.getForObject(url, String.class);
@@ -66,7 +65,7 @@ public class PurchaseService {
                 requestResponse.setConvertedPurchase(null);
             } else {
                 ConvertedPurchase convertedPurchase = new ConvertedPurchase(
-                        searchRequest.getUuid(),
+                        searchRequest.uuid(),
                         purchaseTransaction.getDescription(),
                         purchaseTransaction.getTransactionDate(),
                         Double.valueOf(response.getExchange_rate()),

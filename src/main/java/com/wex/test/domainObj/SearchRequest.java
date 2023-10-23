@@ -1,26 +1,15 @@
 package com.wex.test.domainObj;
 
-public class SearchRequest {
+import java.time.LocalDate;
+import java.util.UUID;
 
-    private String uuid;
-    private String country_currency_desc;
-    private String record_date;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-    public SearchRequest(String uuid, String country_currency_desc, String record_date) {
-        this.uuid = uuid;
-        this.country_currency_desc = country_currency_desc;
-        this.record_date = record_date;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getCountry_currency_desc() {
-        return country_currency_desc;
-    }
-
-    public String getRecord_date() {
-        return record_date;
-    }
-}
+public record SearchRequest (
+    @Schema(description = "Purchase transaction ID", example = "a42dbe56-2660-4ee4-b439-4b976a2e06d9", requiredMode = Schema.RequiredMode.REQUIRED)
+    UUID uuid,
+    @Schema(description = "Description of currency", example = "GERMANY-EURO", requiredMode = Schema.RequiredMode.REQUIRED)
+    String countryCurrencyDesc,
+    @Schema(description = "Record date", example = "2018-12-31", requiredMode = Schema.RequiredMode.REQUIRED)
+    LocalDate recordDate
+){}
