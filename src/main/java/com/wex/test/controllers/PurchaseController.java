@@ -1,7 +1,6 @@
 package com.wex.test.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.wex.test.domainObj.ConvertedPurchase;
 import com.wex.test.domainObj.PurchaseTransaction;
 import com.wex.test.domainObj.RequestResponse;
 import com.wex.test.domainObj.SearchRequest;
