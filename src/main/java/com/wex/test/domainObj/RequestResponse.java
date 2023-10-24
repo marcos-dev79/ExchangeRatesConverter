@@ -1,7 +1,10 @@
 package com.wex.test.domainObj;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class RequestResponse {
 
+    @Schema(description = "Response message", example = "Success")
     private String message;
     private ConvertedPurchase convertedPurchase;
 

@@ -33,21 +33,17 @@ public class PurchaseService {
 
         RequestResponse requestResponse = new RequestResponse();
 
-        // Check if it exists first, so we don't need to make a call to the API, saving resources.
-        Optional<PurchaseTransaction> opt = purchaseTransactionRepository.findByUuid(searchRequest.getUuid());
-        PurchaseTransaction purchaseTransaction;
-        if (opt.isPresent()) {
-            purchaseTransaction = opt.get();
-        } else {
+        Optional<PurchaseTransaction> opt = purchaseTransactionRepository.findByUuid(searchRequest.uuid());
+        if(opt.isEmpty()){
             requestResponse.setMessage("The purchase cannot be found.");
             requestResponse.setConvertedPurchase(null);
             return requestResponse;
         }
+        PurchaseTransaction purchaseTransaction = opt.get();
 
-        String url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,exchange_rate,record_date&filter=country_currency_desc:IN:("+ searchRequest.getCountry_currency_desc() +"),record_date:lte:"+searchRequest.getRecord_date()+"&sort=-record_date&format=json";
+        String url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,exchange_rate,record_date&filter=country_currency_desc:IN:("+ searchRequest.countryCurrencyDesc() +"),record_date:lte:"+searchRequest.recordDate()+"&sort=-record_date&format=json";
 
-        LocalDate requestDate = LocalDate.parse(searchRequest.getRecord_date());
-        LocalDate monthsago = requestDate.minusMonths(6);
+        LocalDate sixMonthsAgo = searchRequest.recordDate().minusMonths(6);
 
         RestTemplate restTemplate = new RestTemplate();
         String json = restTemplate.getForObject(url, String.class);
@@ -55,7 +51,7 @@ public class PurchaseService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
         TreasuryResponse[] responsesArr = objectMapper.readValue(jsonNode.get("data").toString(), TreasuryResponse[].class);
-        List<TreasuryResponse> treasuryResponses = new ArrayList(Arrays.asList(responsesArr));
+        List<TreasuryResponse> treasuryResponses = List.of(responsesArr);
         TreasuryResponse response = treasuryResponses.get(0);
 
         DecimalFormat df = new DecimalFormat("#.##");
@@ -64,12 +60,12 @@ public class PurchaseService {
 
         if(response != null) {
             LocalDate responseDate = LocalDate.parse(response.getRecord_date());
-            if (responseDate.isBefore(monthsago)) {
+            if (responseDate.isBefore(sixMonthsAgo)) {
                 requestResponse.setMessage("The purchase cannot be converted to the target currency.");
                 requestResponse.setConvertedPurchase(null);
-            }else {
+            } else {
                 ConvertedPurchase convertedPurchase = new ConvertedPurchase(
-                        searchRequest.getUuid(),
+                        searchRequest.uuid(),
                         purchaseTransaction.getDescription(),
                         purchaseTransaction.getTransactionDate(),
                         Double.valueOf(response.getExchange_rate()),
